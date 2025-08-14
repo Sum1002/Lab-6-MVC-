@@ -1,0 +1,87 @@
+@model BookshopManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<h1>Create New Book</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" placeholder="e.g., 978-0743273565" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+                <small class="form-text text-muted">Enter a valid ISBN-10 or ISBN-13 format</small>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Price" class="control-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" min="0.01" />
+                </div>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Genre" class="control-label"></label>
+                <input asp-for="Genre" class="form-control" placeholder="e.g., Fiction, Mystery, Science Fiction" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="PublicationYear" class="control-label"></label>
+                <input asp-for="PublicationYear" class="form-control" type="number" min="1000" max="@DateTime.Now.Year" />
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter a brief description of the book..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">Create Book</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Book Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Title:</strong> Enter the complete title of the book</p>
+                <p><strong>Author:</strong> Full name of the author</p>
+                <p><strong>ISBN:</strong> International Standard Book Number</p>
+                <p><strong>Price:</strong> Retail price in dollars</p>
+                <p><strong>Genre:</strong> Category or type of book</p>
+                <p><strong>Publication Year:</strong> Year the book was first published</p>
+                <p><strong>Description:</strong> Brief summary or description</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

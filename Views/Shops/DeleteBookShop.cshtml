@@ -1,0 +1,59 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.BookShop
+
+@{
+    ViewData["Title"] = "Remove Book from Shop";
+}
+
+<h1>Remove Book from Shop</h1>
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to remove this book from the shop?</h4>
+    <p>This action will remove the book from the shop's inventory. Any existing orders for this book from this shop will be affected.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.Book.Title - @Model.Shop.Name</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Book</dt>
+                    <dd class="col-sm-9">@Model.Book.Title by @Model.Book.Author</dd>
+                    
+                    <dt class="col-sm-3">Shop</dt>
+                    <dd class="col-sm-9">@Model.Shop.Name</dd>
+                    
+                    <dt class="col-sm-3">ISBN</dt>
+                    <dd class="col-sm-9">@Model.Book.ISBN</dd>
+                    
+                    <dt class="col-sm-3">Current Quantity</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Quantity)</dd>
+                    
+                    <dt class="col-sm-3">Shop Price</dt>
+                    <dd class="col-sm-9">@(Model.ShopPrice?.ToString("C") ?? Model.Book.Price.ToString("C"))</dd>
+                    
+                    <dt class="col-sm-3">Notes</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Notes)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Actions</h5>
+                <form asp-controller="Shops" asp-action="DeleteBookShop" method="post">
+                    <input type="hidden" asp-for="BookShopId" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Remove from Shop</button>
+                        <a asp-controller="Shops" asp-action="Details" asp-route-id="@Model.ShopId" class="btn btn-secondary">Back to Shop</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

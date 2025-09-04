@@ -36,11 +36,64 @@
             </div>
         </div>
         
+        <!-- Add Book to Shop Form -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Add Book to Shop</h5>
+            </div>
+            <div class="card-body">
+                <form asp-controller="Shops" asp-action="AddBook" method="post">
+                    <input type="hidden" name="shopId" value="@Model.ShopId" />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="bookId" class="form-label">Select Book</label>
+                                <select name="bookId" class="form-control" required>
+                                    <option value="">-- Select a Book --</option>
+                                    @if (ViewData["AvailableBooks"] is SelectList availableBooks)
+                                    {
+                                        @foreach (var book in availableBooks)
+                                        {
+                                            <option value="@book.Value">@book.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group mb-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" name="quantity" class="form-control" min="1" value="1" required />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label for="shopPrice" class="form-label">Shop Price (Optional)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" name="shopPrice" class="form-control" step="0.01" min="0" placeholder="Leave empty for book's default price" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div>
+                                    <button type="submit" class="btn btn-success">Add Book</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Books in Shop -->
         @if (Model.BookShops.Any())
         {
             <div class="card mt-4">
                 <div class="card-header">
-                    <h5>Books Available</h5>
+                    <h5>Books Available in This Shop</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -49,8 +102,10 @@
                                 <tr>
                                     <th>Book Title</th>
                                     <th>Author</th>
+                                    <th>ISBN</th>
                                     <th>Quantity</th>
                                     <th>Shop Price</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,13 +114,28 @@
                                     <tr>
                                         <td>@bookShop.Book.Title</td>
                                         <td>@bookShop.Book.Author</td>
+                                        <td>@bookShop.Book.ISBN</td>
                                         <td>@bookShop.Quantity</td>
-                                        <td>@(bookShop.ShopPrice?.ToString("C") ?? "N/A")</td>
+                                        <td>@(bookShop.ShopPrice?.ToString("C") ?? bookShop.Book.Price.ToString("C"))</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a asp-controller="Shops" asp-action="EditBookShop" asp-route-id="@bookShop.BookShopId" class="btn btn-warning btn-sm">Edit</a>
+                                                <a asp-controller="Shops" asp-action="DeleteBookShop" asp-route-id="@bookShop.BookShopId" class="btn btn-danger btn-sm">Remove</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card mt-4">
+                <div class="card-body">
+                    <p class="text-muted">No books are currently available in this shop. Use the form above to add books.</p>
                 </div>
             </div>
         }

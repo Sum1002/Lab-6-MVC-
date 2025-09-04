@@ -1,0 +1,78 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.BookShop
+
+@{
+    ViewData["Title"] = "Add Book to Shop";
+}
+
+<h1>Add Book to Shop</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="BookId" class="control-label">Book</label>
+                <select asp-for="BookId" class="form-control" asp-items="ViewBag.BookId">
+                    <option value="">-- Select Book --</option>
+                </select>
+                <span asp-validation-for="BookId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ShopId" class="control-label">Shop</label>
+                <select asp-for="ShopId" class="form-control" asp-items="ViewBag.ShopId">
+                    <option value="">-- Select Shop --</option>
+                </select>
+                <span asp-validation-for="ShopId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ShopPrice" class="control-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="ShopPrice" class="form-control" type="number" step="0.01" min="0.01" />
+                </div>
+                <span asp-validation-for="ShopPrice" class="text-danger"></span>
+                <small class="form-text text-muted">Leave empty to use the book's default price</small>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Notes" class="control-label"></label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Additional notes about this book in this shop..."></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">Add to Shop</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Inventory Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Book:</strong> Select which book to add to inventory</p>
+                <p><strong>Shop:</strong> Select which shop to add the book to</p>
+                <p><strong>Quantity:</strong> Number of copies available in this shop</p>
+                <p><strong>Shop Price:</strong> Price for this book in this specific shop (optional)</p>
+                <p><strong>Notes:</strong> Additional information about this book-shop relationship</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

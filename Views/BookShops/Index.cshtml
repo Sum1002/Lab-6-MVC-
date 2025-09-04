@@ -1,0 +1,50 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<BookshopManagement.Models.BookShop>
+
+@{
+    ViewData["Title"] = "Book-Shop Inventory";
+}
+
+<h1>Book-Shop Inventory</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Book to Shop</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Shop</th>
+                <th>Location</th>
+                <th>Quantity</th>
+                <th>Shop Price</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>@item.Book.Author</td>
+                    <td>@item.Shop.Name</td>
+                    <td>@item.Shop.Location</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.ShopPrice?.ToString("C") ?? "N/A")</td>
+                    <td>@(item.Notes?.Length > 50 ? item.Notes.Substring(0, 50) + "..." : item.Notes)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Details" asp-route-id="@item.BookShopId" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.BookShopId" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.BookShopId" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

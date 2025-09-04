@@ -1,0 +1,75 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.Order
+
+@{
+    ViewData["Title"] = "Delete Order";
+}
+
+<h1>Delete Order</h1>
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this order?</h4>
+    <p>This action cannot be undone.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Order #@Model.OrderId</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Customer)</dt>
+                    <dd class="col-sm-9">@Model.Customer.FullName</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.BookShop)</dt>
+                    <dd class="col-sm-9">@Model.BookShop.Book.Title - @Model.BookShop.Shop.Name</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Quantity)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Quantity)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OrderDate)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.OrderDate)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TotalPrice)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalPrice)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OrderStatus)</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-@(Model.OrderStatus == "Completed" ? "success" : Model.OrderStatus == "Shipped" ? "info" : "warning")">
+                            @Html.DisplayFor(model => model.OrderStatus)
+                        </span>
+                    </dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OrderNotes)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.OrderNotes)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShippedDate)</dt>
+                    <dd class="col-sm-9">@(Model.ShippedDate?.ToString("MM/dd/yyyy") ?? "Not shipped")</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShippingMethod)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ShippingMethod)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShippingCost)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ShippingCost)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Actions</h5>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="OrderId" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Delete Order</button>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

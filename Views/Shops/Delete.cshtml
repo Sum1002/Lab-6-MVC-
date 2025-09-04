@@ -1,0 +1,59 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.Shop
+
+@{
+    ViewData["Title"] = "Delete Shop";
+}
+
+<h1>Delete Shop</h1>
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this shop?</h4>
+    <p>This action cannot be undone. All associated BookShop entries and Orders will also be deleted.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.Name</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Location)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Location)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Address)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Address)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Phone)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Phone)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Website)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Website)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OpeningYear)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.OpeningYear)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Actions</h5>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="ShopId" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Delete Shop</button>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.BookShop
+
+@{
+    ViewData["Title"] = "Delete Book-Shop Entry";
+}
+
+<h1>Delete Book-Shop Entry</h1>
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this book-shop entry?</h4>
+    <p>This action cannot be undone. All associated orders will also be deleted.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.Book.Title - @Model.Shop.Name</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Book</dt>
+                    <dd class="col-sm-9">@Model.Book.Title by @Model.Book.Author</dd>
+                    
+                    <dt class="col-sm-3">ISBN</dt>
+                    <dd class="col-sm-9">@Model.Book.ISBN</dd>
+                    
+                    <dt class="col-sm-3">Shop</dt>
+                    <dd class="col-sm-9">@Model.Shop.Name</dd>
+                    
+                    <dt class="col-sm-3">Shop Location</dt>
+                    <dd class="col-sm-9">@Model.Shop.Location</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Quantity)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Quantity)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShopPrice)</dt>
+                    <dd class="col-sm-9">@(Model.ShopPrice?.ToString("C") ?? "N/A")</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Notes)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Notes)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Actions</h5>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="BookShopId" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Delete Entry</button>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

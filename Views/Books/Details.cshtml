@@ -1,0 +1,85 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<h1>Book Details</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.Title</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Author)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Author)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ISBN)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.ISBN)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Price)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Genre)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PublicationYear)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.PublicationYear)</dd>
+                    
+                    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+                </dl>
+            </div>
+        </div>
+        
+        @if (Model.BookShops.Any())
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>Available in Shops</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Shop</th>
+                                    <th>Quantity</th>
+                                    <th>Shop Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var bookShop in Model.BookShops)
+                                {
+                                    <tr>
+                                        <td>@bookShop.Shop.Name</td>
+                                        <td>@bookShop.Quantity</td>
+                                        <td>@(bookShop.ShopPrice?.ToString("C") ?? "N/A")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Actions</h5>
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.BookId" class="btn btn-warning">Edit Book</a>
+                    <a asp-action="Delete" asp-route-id="@Model.BookId" class="btn btn-danger">Delete Book</a>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

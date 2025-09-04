@@ -1,0 +1,122 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model BookshopManagement.Models.Order
+
+@{
+    ViewData["Title"] = "Edit Order";
+}
+
+<h1>Edit Order</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OrderId" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="CustomerId" class="control-label">Customer</label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId">
+                    <option value="">-- Select Customer --</option>
+                </select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="BookShopId" class="control-label">Book & Shop</label>
+                <select asp-for="BookShopId" class="form-control" asp-items="ViewBag.BookShopId">
+                    <option value="">-- Select Book & Shop --</option>
+                </select>
+                <span asp-validation-for="BookShopId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="OrderDate" class="control-label"></label>
+                <input asp-for="OrderDate" class="form-control" type="date" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="TotalPrice" class="form-control" type="number" step="0.01" min="0.01" />
+                </div>
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="OrderStatus" class="control-label"></label>
+                <select asp-for="OrderStatus" class="form-control">
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="OrderNotes" class="control-label"></label>
+                <textarea asp-for="OrderNotes" class="form-control" rows="3" placeholder="Additional order notes..."></textarea>
+                <span asp-validation-for="OrderNotes" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ShippedDate" class="control-label"></label>
+                <input asp-for="ShippedDate" class="form-control" type="date" />
+                <span asp-validation-for="ShippedDate" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ShippingMethod" class="control-label"></label>
+                <input asp-for="ShippingMethod" class="form-control" placeholder="e.g., Standard, Express, Overnight" />
+                <span asp-validation-for="ShippingMethod" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="ShippingCost" class="control-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="ShippingCost" class="form-control" type="number" step="0.01" min="0" />
+                </div>
+                <span asp-validation-for="ShippingCost" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Order Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Customer:</strong> Select the customer placing the order</p>
+                <p><strong>Book & Shop:</strong> Select which book from which shop</p>
+                <p><strong>Quantity:</strong> Number of books to order</p>
+                <p><strong>Order Date:</strong> Date the order was placed</p>
+                <p><strong>Total Price:</strong> Total cost of the order</p>
+                <p><strong>Order Status:</strong> Current status of the order</p>
+                <p><strong>Order Notes:</strong> Additional information about the order</p>
+                <p><strong>Shipped Date:</strong> Date the order was shipped</p>
+                <p><strong>Shipping Method:</strong> How the order will be shipped</p>
+                <p><strong>Shipping Cost:</strong> Cost of shipping</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

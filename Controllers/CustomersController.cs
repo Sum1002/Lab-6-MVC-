@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookshopManagement.Data;
 using BookshopManagement.Models;
@@ -32,12 +33,20 @@ namespace BookshopManagement.Controllers
                 .Include(c => c.Orders)
                 .ThenInclude(o => o.BookShop)
                 .ThenInclude(bs => bs.Book)
+                .Include(c => c.Orders)
+                .ThenInclude(o => o.BookShop)
+                .ThenInclude(bs => bs.Shop)
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
 
             if (customer == null)
             {
                 return NotFound();
             }
+
+            // Get shops for dropdown
+            var shops = await _context.Shops.ToListAsync();
+            ViewData["Shops"] = new SelectList(shops, "ShopId", "Name");
+            ViewData["CustomerId"] = id;
 
             return View(customer);
         }
@@ -142,6 +151,91 @@ namespace BookshopManagement.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Customers/GetBooksForShop
+        [HttpGet]
+        public async Task<IActionResult> GetBooksForShop(int shopId)
+        {
+            var books = await _context.BookShops
+                .Where(bs => bs.ShopId == shopId && bs.Quantity > 0)
+                .Include(bs => bs.Book)
+                .Select(bs => new { 
+                    BookShopId = bs.BookShopId, 
+                    BookTitle = bs.Book.Title,
+                    Author = bs.Book.Author,
+                    AvailableQuantity = bs.Quantity,
+                    Price = bs.ShopPrice ?? bs.Book.Price
+                })
+                .ToListAsync();
+
+            return Json(books);
+        }
+
+        // POST: Customers/PlaceOrder
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlaceOrder(int customerId, int bookShopId, int quantity)
+        {
+            try
+            {
+                // Get the BookShop entry to check availability
+                var bookShop = await _context.BookShops
+                    .Include(bs => bs.Book)
+                    .Include(bs => bs.Shop)
+                    .FirstOrDefaultAsync(bs => bs.BookShopId == bookShopId);
+
+                if (bookShop == null)
+                {
+                    ModelState.AddModelError("", "Selected book is no longer available.");
+                    return RedirectToAction(nameof(Details), new { id = customerId });
+                }
+
+                // Validate quantity
+                if (quantity <= 0)
+                {
+                    ModelState.AddModelError("", "Quantity must be greater than 0.");
+                    return RedirectToAction(nameof(Details), new { id = customerId });
+                }
+
+                if (quantity > bookShop.Quantity)
+                {
+                    ModelState.AddModelError("", $"Only {bookShop.Quantity} copies of '{bookShop.Book.Title}' are available in {bookShop.Shop.Name}.");
+                    return RedirectToAction(nameof(Details), new { id = customerId });
+                }
+
+                // Calculate total price
+                var unitPrice = bookShop.ShopPrice ?? bookShop.Book.Price;
+                var totalPrice = unitPrice * quantity;
+
+                // Create the order
+                var order = new Order
+                {
+                    CustomerId = customerId,
+                    BookShopId = bookShopId,
+                    Quantity = quantity,
+                    OrderDate = DateTime.Now,
+                    TotalPrice = totalPrice,
+                    OrderStatus = "Pending"
+                };
+
+                // Add order to database
+                _context.Orders.Add(order);
+
+                // Reduce the quantity in BookShop
+                bookShop.Quantity -= quantity;
+
+                // Save changes
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = $"Order placed successfully! Total: {totalPrice:C}";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while placing the order. Please try again.");
+            }
+
+            return RedirectToAction(nameof(Details), new { id = customerId });
         }
 
         private bool CustomerExists(int id)
